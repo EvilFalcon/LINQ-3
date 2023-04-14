@@ -31,11 +31,12 @@ namespace LINQ_3
 
     public class HospitalBase
     {
-        private List<Diseased> _diseaseds;
+        private List<Diseased> _diseases;
+        private List<Diseased> _sorted = new List<Diseased>();
 
-        public HospitalBase(List<Diseased> diseaseds)
+        public HospitalBase(List<Diseased> diseases)
         {
-            _diseaseds = diseaseds;
+            _diseases = diseases;
         }
 
         public void Work()
@@ -59,11 +60,11 @@ namespace LINQ_3
                 switch (key)
                 {
                     case CommandSortPatientsByFullName:
-                        SortPatientsByFullName();
+                        SortAndPrintAllPatientsByFullName();
                         break;
 
                     case CommandSortAllPatientsByAge:
-                        SortAllPatientsByAge();
+                        SortAndPrintAllByAge();
                         break;
 
                     case CommandShowPatientsByDisease:
@@ -74,26 +75,25 @@ namespace LINQ_3
                         isWork = false;
                         break;
                 }
+
+                PrintRecord(_sorted);
             }
         }
 
-        private void SortPatientsByFullName()
+        private void SortAndPrintAllPatientsByFullName()
         {
-            var sorted = _diseaseds.OrderBy(record => record.FullName).ToList();
-
-            PrintRecord(sorted);
+            _sorted = _diseases.OrderBy(record => record.FullName).ToList();
         }
 
-        private void SortAllPatientsByAge()
+        private void SortAndPrintAllByAge()
         {
-            var sorted = _diseaseds.OrderBy(record => record.Age).ToList();
-            PrintRecord(sorted);
+            _sorted = _diseases.OrderBy(record => record.Age).ToList();
         }
 
         private void ShowPatientsByDisease()
         {
-            var disease = 
-                _diseaseds.Select(record => record.Illness)
+            var disease =
+                _diseases.Select(record => record.Illness)
                     .Distinct()
                     .OrderBy(record => record)
                     .ToList();
@@ -101,27 +101,31 @@ namespace LINQ_3
             Console.WriteLine("Введите заболивание из следуюшего списка :");
             disease.ForEach(illness => Console.WriteLine(illness));
             string input = Console.ReadLine();
-            var selected =
-                _diseaseds.Where(diseased => diseased.Illness.Equals(input, StringComparison.OrdinalIgnoreCase))
+            _sorted =
+                _diseases.Where(diseased => diseased.Illness.Equals(input, StringComparison.OrdinalIgnoreCase))
                     .ToList();
-
-            PrintRecord(selected);
         }
 
         private void PrintRecord(List<Diseased> diseaseds)
         {
+            string line = new string('─', 56);
+            
             if (diseaseds.Count <= 0)
             {
                 Console.WriteLine("Список по вашему запросу оказался пуст");
                 return;
             }
 
-            Console.WriteLine($"| ФИО | Возраст | Заболивание |");
+            Console.WriteLine(line);
+            Console.WriteLine($"| ФИО \t\t\t| Возраст | Заболивание \t|");
 
             foreach (var iDiseased in diseaseds)
             {
+                Console.WriteLine(line);
                 iDiseased.ShowInfo();
             }
+
+            Console.WriteLine(line);
         }
     }
 
@@ -137,10 +141,10 @@ namespace LINQ_3
         public string FullName { get; }
         public int Age { get; }
         public string Illness { get; }
-
+       
         public void ShowInfo()
         {
-            Console.WriteLine($"|{FullName} | {Age} | {Illness} |");
+            Console.WriteLine($"|{FullName,22} | {Age,7} | {Illness,19} |");
         }
     }
 }

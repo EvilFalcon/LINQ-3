@@ -60,11 +60,11 @@ namespace LINQ_3
                 switch (key)
                 {
                     case CommandSortPatientsByFullName:
-                        SortAndPrintAllPatientsByFullName();
+                        SortPatientsByFullName();
                         break;
 
                     case CommandSortAllPatientsByAge:
-                        SortAndPrintAllByAge();
+                        SortAllPatientsByAge();
                         break;
 
                     case CommandShowPatientsByDisease:
@@ -80,12 +80,12 @@ namespace LINQ_3
             }
         }
 
-        private void SortAndPrintAllPatientsByFullName()
+        private void SortPatientsByFullName()
         {
             _sorted = _diseases.OrderBy(record => record.FullName).ToList();
         }
 
-        private void SortAndPrintAllByAge()
+        private void SortAllPatientsByAge()
         {
             _sorted = _diseases.OrderBy(record => record.Age).ToList();
         }

@@ -68,7 +68,7 @@ namespace LINQ_3
                         break;
 
                     case CommandShowPatientsByDisease:
-                        ShowPatientsByDisease();
+                        SortPatientsByDisease();
                         break;
 
                     case CommandExitProgram:
@@ -90,7 +90,7 @@ namespace LINQ_3
             _sorted = _diseases.OrderBy(record => record.Age).ToList();
         }
 
-        private void ShowPatientsByDisease()
+        private void SortPatientsByDisease()
         {
             var disease =
                 _diseases.Select(record => record.Illness)
